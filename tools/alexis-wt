@@ -1,0 +1,65 @@
+#!/usr/bin/env bash
+# alexis-wt: open a parallel workstream with clean context.
+# Creates a git worktree at ../<repo>-<name> on branch <name>,
+# opens a tmux window there and starts Claude Code.
+#
+# Usage:
+#   alexis-wt <name> ["initial task for Claude"]   # create and open
+#   alexis-wt -l                                   # list worktrees
+#   alexis-wt -d <name>                            # close window and remove worktree (branch is kept)
+#
+# Example: alexis-wt data "Implement ingestion per docs/plan.md, Data section"
+set -euo pipefail
+
+usage() { sed -n '2,12p' "$0" | sed 's/^# \{0,1\}//'; exit 1; }
+
+repo_root=$(git rev-parse --show-toplevel 2>/dev/null) || { echo "alexis-wt: not inside a git repo" >&2; exit 1; }
+repo_name=$(basename "$repo_root")
+# Local (unversioned) files copied into each worktree
+LOCAL_FILES=".env .mcp.json .claude/settings.local.json"
+
+case "${1:-}" in
+  ""|-h|--help) usage ;;
+  -l) git -C "$repo_root" worktree list; exit 0 ;;
+  -d)
+    name="${2:?missing name}"
+    dir="$(dirname "$repo_root")/${repo_name}-${name}"
+    tmux kill-window -t "${repo_name}:${name}" 2>/dev/null || true
+    # Remove copied local files if unchanged (if changed, git will complain)
+    for f in $LOCAL_FILES; do
+      [ -f "$dir/$f" ] && cmp -s "$repo_root/$f" "$dir/$f" && rm "$dir/$f"
+    done
+    git -C "$repo_root" worktree remove "$dir"
+    echo "Worktree removed: $dir (branch '$name' kept)"
+    exit 0 ;;
+esac
+
+name="$1"
+task="${2:-}"
+dir="$(dirname "$repo_root")/${repo_name}-${name}"
+
+if [ ! -d "$dir" ]; then
+  if git -C "$repo_root" show-ref --verify --quiet "refs/heads/${name}"; then
+    git -C "$repo_root" worktree add "$dir" "$name"
+  else
+    git -C "$repo_root" worktree add -b "$name" "$dir"
+  fi
+  # Local files git does not track but the project needs
+  for f in $LOCAL_FILES; do
+    if [ -f "$repo_root/$f" ] && [ ! -e "$dir/$f" ]; then
+      mkdir -p "$dir/$(dirname "$f")" && cp "$repo_root/$f" "$dir/$f"
+    fi
+  done
+fi
+
+cmd="claude"
+[ -n "$task" ] && cmd="claude $(printf '%q' "$task")"
+
+if [ -n "${TMUX:-}" ]; then
+  tmux new-window -n "$name" -c "$dir" "$cmd; exec \$SHELL"
+else
+  # Outside tmux: create (or reuse) a session named after the repo
+  tmux has-session -t "$repo_name" 2>/dev/null || tmux new-session -d -s "$repo_name" -c "$repo_root"
+  tmux new-window -t "$repo_name" -n "$name" -c "$dir" "$cmd; exec \$SHELL"
+  tmux attach -t "$repo_name"
+fi

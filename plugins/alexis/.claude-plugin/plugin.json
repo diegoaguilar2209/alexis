@@ -1,0 +1,14 @@
+{
+  "name": "alexis",
+  "displayName": "ALEXIS",
+  "version": "2.0.0",
+  "description": "Agentic Layer for EXecution, Insight and Systems. Kickoff, autopilot with verification, hackathon mode, Power BI executive review, executive decks, session log, idea validation, reviewer subagents and safety hooks for data work.",
+  "author": {
+    "name": "diegoaguilar2209",
+    "url": "https://github.com/diegoaguilar2209"
+  },
+  "homepage": "https://github.com/diegoaguilar2209/alexis",
+  "repository": "https://github.com/diegoaguilar2209/alexis",
+  "license": "MIT",
+  "keywords": ["data", "analytics-engineering", "databricks", "sql", "power-bi", "hackathon", "autopilot"]
+}

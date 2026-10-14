@@ -1,0 +1,39 @@
+# Minimal CI: pre-commit, synced dependencies and tests on every push and pull request.
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  calidad:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # gitleaks scans history
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: pre-commit (black, isort, mypy, gitleaks, hadolint...)
+        uses: pre-commit/action@v3.0.1
+
+      - name: Dependencies (pip-tools)
+        run: |
+          pip install pip-tools
+          if [ -f requirements.txt ]; then pip-sync requirements.txt; fi
+          if [ -f requirements-dev.txt ]; then pip install -r requirements-dev.txt; fi
+
+      - name: Tests
+        run: |
+          if [ -d tests ]; then pip install pytest && pytest -q; else echo "No tests yet"; fi
+
+      - name: Validate docker-compose
+        run: |
+          if [ -f docker-compose.yml ]; then
+            [ -f .env ] || cp .env.example .env 2>/dev/null || true
+            docker compose config -q
+          fi

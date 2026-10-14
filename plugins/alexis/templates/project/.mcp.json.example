@@ -1,0 +1,27 @@
+{
+  "mcpServers": {
+    "databricks-sql": {
+      "type": "http",
+      "url": "https://${DATABRICKS_HOST}/api/2.0/mcp/sql",
+      "headers": { "Authorization": "Bearer ${DATABRICKS_TOKEN}" }
+    },
+    "databricks-genie": {
+      "type": "http",
+      "url": "https://${DATABRICKS_HOST}/api/2.0/mcp/genie/${GENIE_SPACE_ID}",
+      "headers": { "Authorization": "Bearer ${DATABRICKS_TOKEN}" }
+    },
+    "powerbi-modeling": {
+      "command": "npx",
+      "args": ["-y", "@microsoft/powerbi-modeling-mcp@latest", "--start"]
+    },
+    "bigquery": {
+      "command": "toolbox",
+      "args": ["--prebuilt", "bigquery", "--stdio"],
+      "env": { "BIGQUERY_PROJECT": "${BIGQUERY_PROJECT}" }
+    },
+    "aws-cloudwatch": {
+      "command": "uvx",
+      "args": ["awslabs.cloudwatch-mcp-server@latest"]
+    }
+  }
+}

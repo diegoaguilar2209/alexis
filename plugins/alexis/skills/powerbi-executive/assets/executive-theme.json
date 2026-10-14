@@ -1,0 +1,44 @@
+{
+  "name": "ALEXIS Executive",
+  "dataColors": [
+    "#1F4E79",
+    "#8EA9C1",
+    "#5B6770",
+    "#C8CDD2",
+    "#2E7D9A",
+    "#A3B8C8",
+    "#3D3D3D",
+    "#E1E5E8"
+  ],
+  "background": "#FFFFFF",
+  "foreground": "#1A1A1A",
+  "tableAccent": "#1F4E79",
+  "good": "#2E7D32",
+  "neutral": "#8A8F94",
+  "bad": "#C62828",
+  "maximum": "#1F4E79",
+  "center": "#C8CDD2",
+  "minimum": "#F2F4F5",
+  "textClasses": {
+    "callout": {
+      "fontSize": 30,
+      "fontFace": "Segoe UI Semibold",
+      "color": "#1A1A1A"
+    },
+    "title": {
+      "fontSize": 14,
+      "fontFace": "Segoe UI Semibold",
+      "color": "#1A1A1A"
+    },
+    "header": {
+      "fontSize": 12,
+      "fontFace": "Segoe UI Semibold",
+      "color": "#3D3D3D"
+    },
+    "label": {
+      "fontSize": 10,
+      "fontFace": "Segoe UI",
+      "color": "#5B6770"
+    }
+  }
+}

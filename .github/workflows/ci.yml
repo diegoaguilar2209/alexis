@@ -1,0 +1,42 @@
+# Validates the plugin, marketplace, skills, hooks and tools on every push and pull request.
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  validate:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Claude Code plugin validation
+        run: |
+          npm install -g @anthropic-ai/claude-code
+          claude plugin validate ./plugins/alexis --strict
+          claude plugin validate .
+
+      - name: JSON, YAML and skill frontmatter
+        run: |
+          pip install pyyaml
+          python scripts/check_repo.py
+
+      - name: Shell scripts
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq shellcheck
+          shellcheck -S warning tools/alexis-wt tools/alexis-goal setup/install.sh plugins/alexis/scripts/run-py.sh
+
+      - name: Hook and tool tests
+        run: |
+          pip install pytest black isort
+          pytest -q tests

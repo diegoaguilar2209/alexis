@@ -1,0 +1,23 @@
+name: Bug report
+description: Something in ALEXIS does not work as documented
+labels: [bug]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened
+      description: Command or skill used, what you expected, what you got. Remove any private data.
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Versions
+      description: Output of `claude --version` and the ALEXIS version (plugins/alexis/.claude-plugin/plugin.json)
+    validations:
+      required: true
+  - type: dropdown
+    id: os
+    attributes:
+      label: OS
+      options: [Linux, macOS, WSL2, Windows]

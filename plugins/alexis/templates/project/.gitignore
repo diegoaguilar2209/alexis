@@ -1,0 +1,73 @@
+# Base: https://www.toptal.com/developers/gitignore/api/python,vim,linux,certificates
+# (regenerate there for the full version)
+
+### certificates ###
+*.pem
+*.key
+*.crt
+*.cer
+*.der
+*.priv
+
+### Linux ###
+*~
+.fuse_hidden*
+.directory
+.Trash-*
+.nfs*
+
+### Python ###
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.pytest_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+.ipynb_checkpoints
+*.log
+
+### Environments ###
+env/
+.venv/
+venv/
+.env
+.env.*
+!.env.example
+!.env.local
+
+### Vim ###
+[._]*.s[a-v][a-z]
+!*.svg
+[._]*.sw[a-p]
+[._]s[a-rt-v][a-z]
+[._]ss[a-gi-z]
+[._]sw[a-p]
+Session.vim
+Sessionx.vim
+.netrwhist
+tags
+[._]*.un~
+
+# =============================================================================
+# repo: <name> — project specific
+# =============================================================================
+
+# Claude Code: local configuration
+.claude/settings.local.json
+.mcp.local.json
+
+# Secrets (only the examples are versioned)
+.secrets/*
+!.secrets/*.example
+
+# Data and outputs (never in Git; large models to Git LFS or releases)
+data/
+outputs/
+*.parquet
+*.pt
+
+# Databricks
+.databricks/

@@ -1,0 +1,59 @@
+#!/usr/bin/env bash
+# alexis-goal: run Claude Code headless toward a goal until it is met, with live logs.
+#
+# Usage:
+#   alexis-goal "<condition>" [--budget USD] [--mode auto|acceptEdits]
+#
+# Example:
+#   alexis-goal "all tests in tests/ pass (pytest -q exits 0) and pre-commit run --all-files is clean; stop after 25 turns" --budget 5
+#
+# Notes:
+# - Uses `claude -p "/goal ..."`, which loops until the evaluator judges the goal met or impossible.
+# - Headless runs do NOT wait for usage-limit resets. For long runs on a Pro/Max plan, prefer an
+#   interactive session (tmux) with /alexis:autopilot: it continues automatically after the reset.
+# - --budget maps to --max-budget-usd (API billing only).
+# - Logs go to .alexis/logs/goal-<timestamp>.jsonl; a readable summary prints as it runs.
+set -euo pipefail
+
+usage() { sed -n '2,15p' "$0" | sed 's/^# \{0,1\}//'; exit 1; }
+[ $# -ge 1 ] || usage
+case "$1" in -h|--help) usage ;; esac
+
+condition="$1"; shift
+mode="auto"
+extra=()
+while [ $# -gt 0 ]; do
+  case "$1" in
+    --budget) extra+=(--max-budget-usd "$2"); shift 2 ;;
+    --mode) mode="$2"; shift 2 ;;
+    *) echo "alexis-goal: unknown option $1" >&2; usage ;;
+  esac
+done
+
+command -v claude >/dev/null || { echo "alexis-goal: Claude Code is not installed" >&2; exit 1; }
+git rev-parse --is-inside-work-tree >/dev/null 2>&1 || { echo "alexis-goal: run it inside a git repo (checkpoints are commits)" >&2; exit 1; }
+
+mkdir -p .alexis/logs
+log=".alexis/logs/goal-$(date +%Y%m%d-%H%M%S).jsonl"
+echo "Goal: $condition"
+echo "Mode: $mode · log: $log"
+
+claude -p "/goal $condition" --permission-mode "$mode" --output-format stream-json --verbose "${extra[@]}" \
+  | tee "$log" \
+  | python3 -c '
+import json, sys
+for line in sys.stdin:
+    try:
+        msg = json.loads(line)
+    except ValueError:
+        continue
+    kind = msg.get("type")
+    if kind == "assistant":
+        for block in (msg.get("message") or {}).get("content", []):
+            if block.get("type") == "text" and block.get("text", "").strip():
+                print("•", block["text"].strip().splitlines()[0][:160], flush=True)
+            elif block.get("type") == "tool_use":
+                print("  ↳", block.get("name"), flush=True)
+    elif kind == "result":
+        print("\nResult:", msg.get("subtype"), "· turns:", msg.get("num_turns"), "· cost: $%.2f" % (msg.get("total_cost_usd") or 0), flush=True)
+'

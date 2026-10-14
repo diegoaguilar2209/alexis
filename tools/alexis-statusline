@@ -1,0 +1,101 @@
+#!/usr/bin/env python3
+"""ALEXIS status line for Claude Code.
+
+Shows: model and effort · context window bar · 5-hour and weekly plan usage with
+their reset times · session cost (API users) · git worktree.
+
+Claude Code sends session JSON on stdin (see https://code.claude.com/docs/en/statusline).
+The rate_limits block only exists for claude.ai Pro/Max subscribers, after the first
+response of the session; every field is optional and handled when absent.
+
+Configure in ~/.claude/settings.json (setup/install.sh does it for you):
+  "statusLine": {"type": "command", "command": "~/.local/bin/alexis-statusline", "refreshInterval": 60}
+Set ALEXIS_STATUSLINE_ASCII=1 for terminals without Unicode block characters.
+"""
+import json
+import os
+import sys
+from datetime import datetime
+
+GREEN, YELLOW, RED, DIM, RESET = "\033[32m", "\033[33m", "\033[31m", "\033[2m", "\033[0m"
+ASCII = os.environ.get("ALEXIS_STATUSLINE_ASCII") == "1"
+
+
+def color(pct: float) -> str:
+    if pct >= 85:
+        return RED
+    if pct >= 60:
+        return YELLOW
+    return GREEN
+
+
+def bar(pct: float, width: int = 10) -> str:
+    filled = max(0, min(width, round(pct / 100 * width)))
+    full, empty = ("#", "-") if ASCII else ("█", "░")
+    return full * filled + empty * (width - filled)
+
+
+def reset_label(epoch) -> str:
+    try:
+        when = datetime.fromtimestamp(float(epoch))
+    except (TypeError, ValueError, OSError):
+        return ""
+    now = datetime.now()
+    if when.date() == now.date():
+        return when.strftime("%H:%M")
+    return when.strftime("%a %H:%M")
+
+
+def window(name: str, data) -> str:
+    if not isinstance(data, dict) or data.get("used_percentage") is None:
+        return ""
+    pct = float(data["used_percentage"])
+    label = f"{color(pct)}{name} {pct:.0f}%{RESET}"
+    reset = reset_label(data.get("resets_at"))
+    return f"{label} {DIM}↻{reset}{RESET}" if reset and not ASCII else (f"{label} reset {reset}" if reset else label)
+
+
+def main() -> None:
+    try:
+        data = json.load(sys.stdin)
+    except (json.JSONDecodeError, ValueError):
+        print("alexis")
+        return
+
+    parts = []
+    model = (data.get("model") or {}).get("display_name") or "Claude"
+    effort = (data.get("effort") or {}).get("level")
+    parts.append(f"{model}{f' · {effort}' if effort else ''}")
+
+    ctx = data.get("context_window") or {}
+    pct = ctx.get("used_percentage")
+    if pct is not None:
+        pct = float(pct)
+        parts.append(f"ctx {color(pct)}{bar(pct)} {pct:.0f}%{RESET}")
+
+    limits = data.get("rate_limits") or {}
+    five = window("5h", limits.get("five_hour"))
+    week = window("7d", limits.get("seven_day"))
+    if five:
+        parts.append(five)
+    if week:
+        parts.append(week)
+
+    spend = limits.get("spend_limit")
+    if isinstance(spend, dict) and spend.get("used_percentage") is not None:
+        parts.append(window("spend", spend))
+
+    if not five and not week:
+        cost = (data.get("cost") or {}).get("total_cost_usd")
+        if cost:
+            parts.append(f"${float(cost):.2f}")
+
+    worktree = (data.get("workspace") or {}).get("git_worktree")
+    if worktree:
+        parts.append(f"{DIM}wt:{worktree}{RESET}")
+
+    print(" | ".join(parts))
+
+
+if __name__ == "__main__":
+    main()

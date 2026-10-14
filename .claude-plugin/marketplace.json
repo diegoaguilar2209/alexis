@@ -1,0 +1,15 @@
+{
+  "name": "alexis",
+  "description": "ALEXIS: an opinionated Claude Code system for building data solutions — from idea to verified delivery.",
+  "owner": {
+    "name": "diegoaguilar2209",
+    "url": "https://github.com/diegoaguilar2209"
+  },
+  "plugins": [
+    {
+      "name": "alexis",
+      "source": "./plugins/alexis",
+      "description": "Project kickoff, autopilot with verification, hackathon mode, Power BI executive review, executive decks, session log, idea validation, reviewer subagents and safety hooks."
+    }
+  ]
+}

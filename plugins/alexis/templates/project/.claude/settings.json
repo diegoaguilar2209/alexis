@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "deny": [
+      "Read(./.env)",
+      "Read(./.env.*)",
+      "Bash(git push --force *)",
+      "Bash(git push -f *)",
+      "Bash(databricks bundle deploy -t prod *)",
+      "Bash(databricks bundle deploy --target prod *)",
+      "Bash(databricks bundle destroy *)"
+    ],
+    "ask": [
+      "Bash(git push *)",
+      "Bash(databricks bundle deploy *)",
+      "Bash(databricks jobs run-now *)"
+    ]
+  }
+}
