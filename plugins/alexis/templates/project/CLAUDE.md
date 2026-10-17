@@ -33,7 +33,7 @@
 ## Workflow
 1. Spec and plan before code (docs/spec.md, docs/plan.md).
 2. Tests and evals before calling anything done.
-3. After changing SQL: `sql-reviewer`. Before publishing numbers: `data-validator`. Before "done": `verifier`.
+3. After changing SQL: `sql-reviewer`. After changing an agent, its prompts or tools: `agent-reviewer`. Before publishing numbers: `data-validator`. Before "done": `verifier`.
 4. Unattended work: `/alexis:autopilot`. End of session: `/alexis:session-log`.
 
 ## Compact instructions

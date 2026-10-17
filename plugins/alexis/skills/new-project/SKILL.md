@@ -32,7 +32,7 @@ Recommend only the tools that apply (check `/plugin` and `/mcp` for what is alre
 | --- | --- | --- |
 | pipeline | Databricks AI Tools (bundles, pipelines, jobs, Unity Catalog), dbt agent skills, `/alexis:data-contract` for gold tables | Databricks SQL |
 | dashboard | `/alexis:powerbi-executive`, `/alexis:metric-definition`, `data:build-dashboard`, Microsoft `powerbi-authoring` | Power BI Modeling MCP |
-| agent | Databricks Genie/apps skills, `mcp-builder` | Databricks Genie / Unity Catalog functions |
+| agent | `/alexis:build-agent` (pattern, harness, tools, evals, security, deploy), `mcp-builder`, Databricks Genie/apps skills | Databricks Genie / Unity Catalog functions, the target platform's MCP |
 | analysis | `data:explore-data`, `data:analyze`, `data:statistical-analysis`, `data:validate-data` | The data platform's MCP |
 | platform | The infrastructure conventions in the user's CLAUDE.md | AWS / Azure / GCP MCP if it deploys to the cloud |
 | hackathon | `/alexis:hackathon` | The minimum needed |
@@ -56,7 +56,7 @@ Suggested layout per archetype:
 
 - pipeline: `src/`, `sql/{bronze,silver,gold}/`, `tests/`, `resources/` (bundles)
 - dashboard: `model/` (PBIP/TMDL), `sql/`, `docs/kpis.md`
-- agent: `agent/`, `tools/`, `prompts/`, `evals/`
+- agent: `agent/`, `tools/`, `prompts/`, `evals/agent-cases.yaml`, `docs/agent-spec.md`; then hand off to `/alexis:build-agent` for the design steps
 - analysis: `notebooks/`, `sql/`, `outputs/`
 - platform (repo named `<layer>-<technology>`): one parameterized `docker-compose.yml`, `.env.local`, `.env.example`, `config/`, `docker/`, `ansible/`, `docs/{architecture,runbook}.md`, `tests/smoke.sh`
 

@@ -18,6 +18,7 @@ Claude Code es potente de fábrica. Lo que separa un gran resultado de uno prome
 | `/alexis:autopilot` | Claude construye, prueba, corrige e itera solo hasta cumplir criterios medibles (`/goal` + verificación + checkpoints) |
 | `/alexis:hackathon` | Método de los ganadores de hackatones de Claude Code: jurado → spec → evals → paralelo → auditoría → demo |
 | `/alexis:powerbi-executive` | Audita y rediseña reportes de Power BI: modelo, DAX, tablas y diseño de nivel consultora, con archivo de tema |
+| `/alexis:build-agent` | Diseña, construye y despliega agentes de IA: patrón (workflow vs agente), elección de harness (Claude Agent SDK, Microsoft Agent Framework, LangGraph, ADK...), diseño de herramientas, ingeniería de contexto, evals de agentes, seguridad OWASP agéntica, despliegue (Azure Foundry → Teams, Databricks Genie, AWS, GCP) y diagnóstico de "a mí me funciona, a otros no" |
 | `/alexis:data-contract` | Esquema, llaves, valores permitidos y frescura de una tabla compartida, con tests que lo hacen cumplir |
 | `/alexis:metric-definition` | Una sola definición por KPI, trazada de la medida DAX al SQL |
 | `/alexis:exec-deck` | Presentaciones ejecutivas con la conclusión primero y números trazables |
@@ -28,7 +29,7 @@ Claude Code es potente de fábrica. Lo que separa un gran resultado de uno prome
 | Evals | Cada skill tiene casos que se corren con `claude plugin eval`: si se activa con frases naturales y si cumple lo que promete |
 | Rutinas | Plantillas de rutinas en la nube: revisión de PR, documentación desactualizada, chequeo post-deploy |
 | Telemetría | Stack local OpenTelemetry + Grafana con el historial de tokens y costo |
-| Subagentes | `verifier` (auditoría con ojos frescos), `sql-reviewer`, `data-validator`, cada uno con un modelo costo-eficiente |
+| Subagentes | `verifier` (auditoría con ojos frescos), `sql-reviewer`, `data-validator`, `agent-reviewer`, cada uno con un modelo costo-eficiente |
 | Seguridad | Permisos deterministas + hook que bloquea DROP, TRUNCATE, DELETE/UPDATE sin WHERE, deploys a prod, force push y borrados en la nube, también vía MCP |
 | Calidad | Tras cada edición corre el pre-commit de tu repo sobre ese archivo; plantilla con pre-commit, pip-tools y CI |
 | `alexis-statusline` | Modelo, esfuerzo, barra de contexto, **uso de 5 horas y semanal con hora de reinicio**, costo de la sesión |

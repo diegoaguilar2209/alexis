@@ -4,6 +4,17 @@ All notable changes to ALEXIS. Format: [Keep a Changelog](https://keepachangelog
 
 ## [Unreleased]
 
+## [2.2.0] - 2026-10-17
+
+### Added
+- Skill `build-agent`: from spec to production agent. Pattern choice (augmented LLM, chaining, routing, parallelization, orchestrator-workers, evaluator-optimizer, autonomous), harness selection matrix, tool design (agent-computer interface), context engineering, agent evals, OWASP Top 10 for Agentic Applications 2026 controls, cost/model routing, deployment on Azure Foundry (Teams, M365 Copilot), Databricks, AWS, GCP and Anthropic, and a "works for me, fails for others" diagnosis.
+- Subagent `agent-reviewer` for an independent review before real users.
+- Project template: `evals/agent-cases.yaml` with refusal, prompt-injection and permission-boundary cases.
+- Evals: `build-agent-harness`, `build-agent-works-for-me`, `build-agent-pattern`.
+
+### Changed
+- `new-project` agent archetype hands off to `build-agent`; project CLAUDE.md calls `agent-reviewer` after agent changes.
+
 ## [2.1.0] - 2026-10-17
 
 ### Added

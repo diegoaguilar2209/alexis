@@ -18,6 +18,7 @@ Claude Code is powerful out of the box. What separates great results from averag
 | `/alexis:autopilot` | Claude builds, tests, fixes and iterates alone until measurable criteria pass (`/goal` + verification + checkpoints) |
 | `/alexis:hackathon` | Playbook from Claude Code hackathon winners: judges → spec → evals → parallel build → audit → demo |
 | `/alexis:powerbi-executive` | Audit and redesign Power BI reports: model, DAX, tables and consulting-grade design, plus a theme file |
+| `/alexis:build-agent` | Design, build and ship AI agents: pattern (workflow vs agent), harness choice (Claude Agent SDK, Microsoft Agent Framework, LangGraph, ADK...), tool design, context engineering, agent evals, OWASP agentic security, deployment (Azure Foundry → Teams, Databricks Genie, AWS, GCP) and "works for me, fails for others" diagnosis |
 | `/alexis:data-contract` | Schema, keys, allowed values and freshness for a shared table, enforced by generated tests |
 | `/alexis:metric-definition` | One definition per KPI, traced from the DAX measure to the SQL, with mismatches flagged |
 | `/alexis:exec-deck` | Conclusion-first executive presentations with traceable numbers |
@@ -26,7 +27,7 @@ Claude Code is powerful out of the box. What separates great results from averag
 | `/alexis:improve` | Improve your setup from evidence: friction, repeated corrections, usage breakdown |
 | Workflows | `/alexis:audit-model` (one reviewer per file, each finding verified by a second agent) and `/alexis:migrate` (one agent per file in its own worktree, then a checker) |
 | Evals | Every skill has cases run with `claude plugin eval`: does it fire on natural phrasing, and does its output keep its promise |
-| Subagents | `verifier` (fresh-eyes audit), `sql-reviewer`, `data-validator` — each pinned to a cost-effective model |
+| Subagents | `verifier` (fresh-eyes audit), `sql-reviewer`, `data-validator`, `agent-reviewer` — each pinned to a cost-effective model |
 | Safety | Deterministic permission rules + a hook that blocks DROP, TRUNCATE, DELETE/UPDATE without WHERE, prod deploys, force push and cloud deletions, including through MCP |
 | Quality | After every edit, your repo's pre-commit runs on that file; project template with pre-commit, pip-tools and CI |
 | `alexis-statusline` | Model, effort, context bar, **5-hour and weekly plan usage with reset times**, session cost |
