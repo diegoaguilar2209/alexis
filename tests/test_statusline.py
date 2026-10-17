@@ -32,3 +32,9 @@ def test_api_user_shows_cost():
 def test_missing_fields_and_bad_input():
     assert "Claude" in render({})
     assert render("not json").strip() == "alexis"
+
+
+def test_alert_at_80_percent():
+    now = int(time.time())
+    line = render({"model": {"display_name": "Opus"}, "rate_limits": {"five_hour": {"used_percentage": 86, "resets_at": now + 600}}})
+    assert line.index("! 5h 86%") < line.index("Opus")

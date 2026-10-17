@@ -1,0 +1,40 @@
+# Behavioral evals: runs every skill's eval cases with `claude plugin eval`.
+# Each run is a real model call, so this is manual or weekly, not on every push.
+# Requires the repository secret ANTHROPIC_API_KEY.
+name: evals
+
+on:
+  workflow_dispatch:
+    inputs:
+      runs:
+        description: Runs per case
+        default: "3"
+  schedule:
+    - cron: "41 7 * * 1"
+
+jobs:
+  evals:
+    runs-on: ubuntu-24.04
+    if: ${{ github.event_name == 'workflow_dispatch' || vars.ALEXIS_SCHEDULED_EVALS == 'true' }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Run evals
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          npm install -g @anthropic-ai/claude-code
+          cd plugins/alexis
+          claude plugin eval . --trust-plugin --no-publish \
+            --runs "${{ github.event.inputs.runs || '3' }}" \
+            --threshold 0.8 --max-cost-usd 10 --judge-model sonnet \
+            --report eval-report.html --json eval-result.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: eval-report
+          path: |
+            plugins/alexis/eval-report.html
+            plugins/alexis/eval-result.json

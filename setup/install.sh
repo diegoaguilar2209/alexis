@@ -24,12 +24,17 @@ install_plugin alexis@alexis
 install_plugin superpowers@superpowers-marketplace
 install_plugin data@knowledge-work-plugins
 install_plugin document-skills@anthropic-agent-skills
+install_plugin pyright-lsp@claude-plugins-official      # Python code intelligence: fewer file reads
+install_plugin context7@claude-plugins-official         # current, version-specific library docs
+install_plugin security-guidance@claude-plugins-official
 
 if [[ "$FULL" == "--full" ]]; then
   echo "3/5 Platform plugins"
   install_plugin azure@claude-plugins-official
   install_plugin microsoft-docs@claude-plugins-official
   install_plugin github@claude-plugins-official
+  install_plugin pr-review-toolkit@claude-plugins-official
+  install_plugin semgrep@claude-plugins-official
   add_marketplace dbt-labs/dbt-agent-skills
   install_plugin dbt@dbt-agent-marketplace
   add_marketplace microsoft/skills-for-fabric

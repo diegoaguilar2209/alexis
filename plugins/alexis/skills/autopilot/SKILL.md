@@ -1,6 +1,6 @@
 ---
 name: autopilot
-description: Let Claude build, test, fix and iterate on its own until measurable acceptance criteria pass - turns a plan into a /goal condition with verification, checkpoints and a stop budget. Use when the user wants Claude to work unattended, "build it alone", "keep going until it works", or runs /alexis:autopilot.
+description: Use when the user wants Claude to work unattended - "I'm stepping away", "keep going on your own", "build it alone", "don't stop until tests pass" - or runs /alexis:autopilot. Turns a target into a /goal condition with verification commands, constraints, checkpoints and a stop budget so Claude builds, tests and fixes until measurable criteria pass.
 argument-hint: "[what to finish, or a section of docs/plan.md]"
 ---
 
@@ -28,7 +28,12 @@ Stop after <N> turns (default 30) or if blocked by missing access, and report wh
 
 Show the condition to the user and start it with `/goal`. Keep it under 4,000 characters.
 
-## 3. The loop Claude follows each turn
+## 3. Pick the engine: /goal or a workflow
+
+- **`/goal`** (default): one stream of work that converges turn by turn — a feature, a module, a backlog of related fixes.
+- **A dynamic workflow** when the work is many independent items or needs cross-checking: the same change across dozens of files (`/alexis:migrate` with `{ instruction, target, check }`), a review of a whole model (`/alexis:audit-model`), or "keep fixing until the check passes or two rounds make no progress". Workflows run many agents, so they spend more: start on a small slice and check `/workflows` for token use.
+
+## 4. The loop Claude follows each turn
 
 1. Pick the next unchecked task from the plan.
 2. Implement the smallest change that moves the verification forward.
@@ -37,19 +42,20 @@ Show the condition to the user and start it with `/goal`. Keep it under 4,000 ch
 5. Every ~5 green commits, or before declaring done, delegate a fresh-eyes audit to the `verifier` subagent: it checks the work against the spec and evals without having written it.
 6. Update `docs/plan.md` checkboxes and append one line per decision to `docs/decisions.md`.
 
-## 4. Anti-loop rules
+## 5. Anti-loop rules
 
 - Same error three times in a row: stop changing code, write down what was tried, and switch strategy (read the docs, isolate a minimal repro, or ask the user).
 - Never weaken a test, skip it, or hard-code expected outputs to get to green.
 - Do not expand scope. New ideas go to `docs/plan.md` under "Later".
 - If a verification needs credentials or a service that is not available, the goal is blocked: report it instead of mocking it in production code.
 
-## 5. Usage limits and long runs
+## 6. Usage limits and long runs
 
 - On a claude.ai Pro or Max plan, when a 5-hour or weekly usage limit stops the run, Claude Code waits in the open session and continues automatically after the reset (on by default in interactive sessions, v2.1.234+). Keep the terminal open; in tmux, detach and come back. An active goal is restored if the session is resumed with `claude --continue`.
+- Workflows pause the same way when a usage limit hits mid-run and continue after the reset (Claude Code v2.1.271+).
 - That automatic wait is not available in `-p` (headless) runs or with API keys. For unattended headless runs use `alexis-goal`, which runs `claude -p "/goal ..."` with streaming logs.
 - Check spend with `/goal` (no arguments: turns, time, tokens) and `/usage`. The ALEXIS status line shows context use and the 5-hour and weekly limits.
 
-## 6. Finish
+## 7. Finish
 
 When the evaluator reports the goal met: run the full verification once more, run `/alexis:session-log`, and give the user a summary: what was built, verification output, commits on the branch, anything left in "Later". Do not merge to main without the user.

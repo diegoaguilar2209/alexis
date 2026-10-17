@@ -1,0 +1,39 @@
+# Claude reviews every pull request with the data checklist, and answers @claude mentions.
+# Setup once: run `claude` in the repo and then `/install-github-app`
+# (installs the Claude GitHub app and adds the ANTHROPIC_API_KEY secret).
+name: claude-review
+
+on:
+  pull_request:
+    types: [opened, synchronize, ready_for_review]
+  issue_comment:
+    types: [created]
+
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+
+jobs:
+  review:
+    if: >
+      (github.event_name == 'pull_request' && !github.event.pull_request.draft) ||
+      (github.event_name == 'issue_comment' && contains(github.event.comment.body, '@claude'))
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: anthropics/claude-code-action@v1
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          prompt: |
+            Review this pull request as a senior analytics engineer.
+            Follow CLAUDE.md and .claude/rules/. Check in this order:
+            1. SQL/PySpark correctness: join cardinality, NULL handling, grain and keys, filters lost in LEFT JOINs.
+            2. Data safety: no writes to production, no credentials, no data files committed.
+            3. Tests and evals: new logic has tests; nothing was weakened or skipped.
+            4. Performance: SELECT *, partition filters, Python UDFs.
+            Leave inline comments only for real problems, then one summary comment with a verdict:
+            "Ready to merge" or "Changes required".
+          claude_args: "--max-turns 15"

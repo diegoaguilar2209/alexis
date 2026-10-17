@@ -18,16 +18,22 @@ Claude Code is powerful out of the box. What separates great results from averag
 | `/alexis:autopilot` | Claude builds, tests, fixes and iterates alone until measurable criteria pass (`/goal` + verification + checkpoints) |
 | `/alexis:hackathon` | Playbook from Claude Code hackathon winners: judges → spec → evals → parallel build → audit → demo |
 | `/alexis:powerbi-executive` | Audit and redesign Power BI reports: model, DAX, tables and consulting-grade design, plus a theme file |
+| `/alexis:data-contract` | Schema, keys, allowed values and freshness for a shared table, enforced by generated tests |
+| `/alexis:metric-definition` | One definition per KPI, traced from the DAX measure to the SQL, with mismatches flagged |
 | `/alexis:exec-deck` | Conclusion-first executive presentations with traceable numbers |
 | `/alexis:validate-idea` | Filter startup and paid-app ideas before building: customer, who pays, distribution, cheapest experiment |
 | `/alexis:session-log` | Log decisions, measurable impact and next steps at the end of a session (project + Obsidian) |
 | `/alexis:improve` | Improve your setup from evidence: friction, repeated corrections, usage breakdown |
+| Workflows | `/alexis:audit-model` (one reviewer per file, each finding verified by a second agent) and `/alexis:migrate` (one agent per file in its own worktree, then a checker) |
+| Evals | Every skill has cases run with `claude plugin eval`: does it fire on natural phrasing, and does its output keep its promise |
 | Subagents | `verifier` (fresh-eyes audit), `sql-reviewer`, `data-validator` — each pinned to a cost-effective model |
 | Safety | Deterministic permission rules + a hook that blocks DROP, TRUNCATE, DELETE/UPDATE without WHERE, prod deploys, force push and cloud deletions, including through MCP |
 | Quality | After every edit, your repo's pre-commit runs on that file; project template with pre-commit, pip-tools and CI |
 | `alexis-statusline` | Model, effort, context bar, **5-hour and weekly plan usage with reset times**, session cost |
 | `alexis-wt` | One git worktree + one tmux window + one Claude Code session per workstream |
 | `alexis-goal` | Headless goal runs with live logs |
+| Routine templates | Cloud routines for PR review, documentation drift, post-deploy checks and ALEXIS upkeep |
+| Telemetry | Local OpenTelemetry + Prometheus + Loki + Grafana stack for token and cost history |
 | Obsidian vault starter | Long-term memory and a career impact log |
 
 ## Install
@@ -54,14 +60,29 @@ mkdir churn-model && cd churn-model && claude
 /alexis:session-log # when you stop
 ```
 
+## Evals: proof that each skill helps
+
+Each skill ships with eval cases in `plugins/alexis/evals/`. `claude plugin eval` runs them in isolated sessions, checks that the skill fires on natural phrasing (in English and Spanish) and grades the output against a rubric, optionally comparing against the same prompt without ALEXIS.
+
+```bash
+cd plugins/alexis
+claude plugin eval . --runs 1 --ablation none --judge-model sonnet   # quick check
+claude plugin eval . --judge-model sonnet                            # full, with vs. without ALEXIS
+```
+
+The suite already caught real problems: the kickoff skill asked too many sub-questions, and the autopilot skill fired only 1 time in 3 on "I'm stepping away, keep going" until its description was rewritten (now 3 in 3). A manual or weekly GitHub workflow runs the suite with your `ANTHROPIC_API_KEY` secret.
+
 ## Autonomy: how Claude keeps working alone
 
-`/alexis:autopilot` turns your plan into a `/goal` condition with a verification command, constraints and a turn budget. After every turn a separate evaluator model checks the condition; if it is not met, Claude continues with the evaluator's feedback. Claude commits each green step, a `verifier` subagent audits the work with fresh eyes, and anti-loop rules force a change of strategy after repeated failures. Run it in auto mode so tool calls do not wait for approval; the deny rules and the safety hook still apply.
+`/alexis:autopilot` turns your plan into a `/goal` condition with a verification command, constraints and a turn budget. After every turn a separate evaluator model checks the condition; if it is not met, Claude continues with the evaluator's feedback. Claude commits each green step, a `verifier` subagent audits the work with fresh eyes, and anti-loop rules force a change of strategy after repeated failures. Run it in auto mode so tool calls do not wait for approval; the deny rules and the safety hook still apply. For many independent items (a migration across dozens of files, a review of a whole model), autopilot switches to a dynamic workflow that runs many agents in parallel and cross-checks their results.
+
+For work that should happen without your laptop, `routines/` has templates for Claude Code cloud routines: PR review, documentation drift, post-deploy checks.
 
 ## Tokens, models and usage limits
 
 - **Model routing**: subagents and light skills are pinned to cheaper models (`sonnet`, `haiku`) so they do not inherit Opus. The user CLAUDE.md template recommends `sonnet` for daily work, `opusplan` for complex features (Opus plans, Sonnet executes) and lowering `/effort` before switching to a bigger model.
-- **Meter**: the status line shows context use and, on Pro/Max plans, the rolling **5-hour** and **weekly** usage with their reset times. `/usage` shows what is driving your usage (skills, subagents, MCP servers).
+- **History**: `telemetry/` runs a local OpenTelemetry + Grafana stack with tokens and cost per day, model and tool.
+- **Meter**: the status line shows context use and, on Pro/Max plans, the rolling **5-hour** and **weekly** usage with their reset times. At 80% of the 5-hour window it leads with a warning to save state. `/usage` shows what is driving your usage (skills, subagents, MCP servers).
 - **When you hit a limit**: on Pro/Max, Claude Code waits in the open session and continues the interrupted task automatically after the reset (interactive sessions, Claude Code v2.1.234+). Keep the terminal open (tmux helps). If the limit is a weekly one more than 24 hours away, or you prefer to keep working, `/usage-credits` lets you continue on paid usage. Headless (`-p`) runs and API keys do not wait.
 
 ## Power BI

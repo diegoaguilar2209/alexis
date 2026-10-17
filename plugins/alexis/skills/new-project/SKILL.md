@@ -10,7 +10,7 @@ Goal: go from "I have an idea" to a repo ready to build, with spec, plan and eva
 
 ## Step 1. Understand (one round of questions)
 
-Read what the user already said ($ARGUMENTS and the conversation). Ask ONLY what is missing, in a single message, at most 5 questions, from this list:
+Read what the user already said ($ARGUMENTS and the conversation). Ask ONLY what is missing, in a single message: at most 5 questions, each one short sentence with a single ask (no sub-questions, no lists of options inside a question). Pick from this list:
 
 1. Business problem and the KPI that must move (with a number if one exists).
 2. End user and how they consume the result (dashboard, API, chat agent, deck, table).
@@ -18,7 +18,9 @@ Read what the user already said ($ARGUMENTS and the conversation). Ask ONLY what
 4. Data: sources, volume, frequency, platform (Databricks, BigQuery, Snowflake, Postgres, files).
 5. Deliverables and date.
 
-If the description already answers something, do not ask it. For a hackathon, also ask for the rules and judging criteria. If the project is meant to make money and has not gone through `/alexis:validate-idea`, suggest it before the spec.
+Bad: "Who will use the dashboard, and what decision should it support?" (two asks). Good: "What decision should the dashboard support?" If two things matter, pick the one that changes the design most and state an assumption for the other.
+
+If the description already answers something, do not ask it. Anything else worth knowing (data sensitivity, deployment details) becomes an assumption you state in one line, not another question. For a hackathon, also ask for the rules and judging criteria. If the project is meant to make money and has not gone through `/alexis:validate-idea`, suggest it before the spec.
 
 ## Step 2. Classify and pick an archetype
 
@@ -28,8 +30,8 @@ Recommend only the tools that apply (check `/plugin` and `/mcp` for what is alre
 
 | Archetype | Skills / plugins | MCP |
 | --- | --- | --- |
-| pipeline | Databricks AI Tools (bundles, pipelines, jobs, Unity Catalog), dbt agent skills | Databricks SQL |
-| dashboard | `/alexis:powerbi-executive`, `data:build-dashboard`, Microsoft `powerbi-authoring` | Power BI Modeling MCP |
+| pipeline | Databricks AI Tools (bundles, pipelines, jobs, Unity Catalog), dbt agent skills, `/alexis:data-contract` for gold tables | Databricks SQL |
+| dashboard | `/alexis:powerbi-executive`, `/alexis:metric-definition`, `data:build-dashboard`, Microsoft `powerbi-authoring` | Power BI Modeling MCP |
 | agent | Databricks Genie/apps skills, `mcp-builder` | Databricks Genie / Unity Catalog functions |
 | analysis | `data:explore-data`, `data:analyze`, `data:statistical-analysis`, `data:validate-data` | The data platform's MCP |
 | platform | The infrastructure conventions in the user's CLAUDE.md | AWS / Azure / GCP MCP if it deploys to the cloud |

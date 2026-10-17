@@ -11,6 +11,7 @@ response of the session; every field is optional and handled when absent.
 Configure in ~/.claude/settings.json (setup/install.sh does it for you):
   "statusLine": {"type": "command", "command": "~/.local/bin/alexis-statusline", "refreshInterval": 60}
 Set ALEXIS_STATUSLINE_ASCII=1 for terminals without Unicode block characters.
+At ALEXIS_STATUSLINE_ALERT percent (default 80) of the 5-hour window, the line leads with a warning.
 """
 import json
 import os
@@ -19,6 +20,7 @@ from datetime import datetime
 
 GREEN, YELLOW, RED, DIM, RESET = "\033[32m", "\033[33m", "\033[31m", "\033[2m", "\033[0m"
 ASCII = os.environ.get("ALEXIS_STATUSLINE_ASCII") == "1"
+ALERT = float(os.environ.get("ALEXIS_STATUSLINE_ALERT", "80"))
 
 
 def color(pct: float) -> str:
@@ -76,7 +78,10 @@ def main() -> None:
     limits = data.get("rate_limits") or {}
     five = window("5h", limits.get("five_hour"))
     week = window("7d", limits.get("seven_day"))
-    if five:
+    five_pct = (limits.get("five_hour") or {}).get("used_percentage")
+    if five_pct is not None and float(five_pct) >= ALERT:
+        parts.insert(0, f"{RED}! 5h {float(five_pct):.0f}%: save state, /alexis:session-log{RESET}")
+    elif five:
         parts.append(five)
     if week:
         parts.append(week)
