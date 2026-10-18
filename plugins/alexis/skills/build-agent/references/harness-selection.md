@@ -28,6 +28,9 @@ These SDKs change monthly. Confirm current APIs with Context7 or the vendor docs
 5. What language does the team maintain?
 6. Who operates it in production?
 
+## Models
+Model line-ups and prices change every few weeks (Oct 2026 alone: GPT-6, Gemini 4 Argon GA, Claude Haiku 5.5). Never hard-code a model choice into the design: keep the model a configuration value, route by task difficulty, and re-run the evals when switching. Open-weight models (Gemma, Nemotron, Qwen, Llama) run locally or in the VPC when data residency or cost per call decides; check their tool-calling quality on your evals first.
+
 ## Rule
 One orchestration framework per agent. Wrapping a framework inside another doubles the failure modes and the tracing gaps. Mixing at the protocol level is fine: MCP for tools, A2A between independently deployed agents.
 

@@ -36,3 +36,5 @@ Output a table: implementation, location, matches definition (yes/no), differenc
 ## 4. Fix
 
 Propose changes so every implementation matches the source of truth, with the corrected DAX or SQL. Apply only with the user's approval, and record value-changing fixes in `docs/decisions.md` so consumers know why a number moved.
+
+If an AI agent, Genie space or chat assistant will answer questions about this metric, publish the definition in the semantic layer the agent queries (dbt Semantic Layer, Databricks metric view, Power BI semantic model) so the agent reuses it instead of writing its own SQL. See `/alexis:build-agent` → `references/data-agents.md`.

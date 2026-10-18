@@ -19,6 +19,7 @@ Claude Code is powerful out of the box. What separates great results from averag
 | `/alexis:hackathon` | Playbook from Claude Code hackathon winners: judges → spec → evals → parallel build → audit → demo |
 | `/alexis:powerbi-executive` | Audit and redesign Power BI reports: model, DAX, tables and consulting-grade design, plus a theme file |
 | `/alexis:build-agent` | Design, build and ship AI agents: pattern (workflow vs agent), harness choice (Claude Agent SDK, Microsoft Agent Framework, LangGraph, ADK...), tool design, context engineering, agent evals, OWASP agentic security, deployment (Azure Foundry → Teams, Databricks Genie, AWS, GCP) and "works for me, fails for others" diagnosis |
+| `/alexis:tech-radar` | What is new and what actually works in AI, agents, Claude Code or data platforms: primary sources, Adopt/Trial/Assess/Hold ratings, and concrete edits to your project or to ALEXIS. A monthly routine runs it on ALEXIS itself |
 | `/alexis:data-contract` | Schema, keys, allowed values and freshness for a shared table, enforced by generated tests |
 | `/alexis:metric-definition` | One definition per KPI, traced from the DAX measure to the SQL, with mismatches flagged |
 | `/alexis:exec-deck` | Conclusion-first executive presentations with traceable numbers |

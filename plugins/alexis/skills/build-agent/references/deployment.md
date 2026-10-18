@@ -11,6 +11,12 @@ Deploy where users already work. Check current platform docs before building: re
 - **Observability:** Foundry tracing (OpenTelemetry) into Application Insights; Foundry evaluations for quality and safety.
 - **Infra as code:** Bicep or Terraform; dev and prod in separate resource groups or subscriptions.
 
+### Agent governance (Microsoft)
+Agent 365 is becoming the registry and control plane for agents in Microsoft tenants (the agent registry is moving there from Entra). Each agent gets an Entra Agent ID, owner, permissions and lifecycle; expect security teams to require registration before production.
+
+## Observability standard
+OpenTelemetry GenAI semantic conventions (still "Development" status, names may change): spans `invoke_agent`, `invoke_workflow`, `execute_tool` (name includes the tool), `gen_ai.*` attributes for provider, model, tokens (including cache and reasoning tokens) and finish reasons; MCP conventions link client and server spans. Emit these instead of custom names so traces work in Datadog, Grafana, Application Insights, Langfuse and others. Content capture is off by default; keep it off for sensitive data.
+
 ## Databricks
 - Questions over governed tables: Genie space first; expose it to other agents through Databricks managed MCP (Genie, DBSQL, Unity Catalog functions, Vector Search).
 - Custom agents: Agent Bricks / Mosaic AI Agent Framework, served with Model Serving, traced with MLflow, evaluated with MLflow agent evaluation.

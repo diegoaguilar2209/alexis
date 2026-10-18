@@ -4,6 +4,17 @@ All notable changes to ALEXIS. Format: [Keep a Changelog](https://keepachangelog
 
 ## [Unreleased]
 
+## [2.3.0] - 2026-10-17
+
+### Added
+- Skill `tech-radar`: researches recent primary sources, rates findings Adopt/Trial/Assess/Hold with evidence and proposes concrete edits; routine `alexis-radar` runs it monthly on ALEXIS and opens a PR.
+- `build-agent` references from the October 2026 radar: `advanced-tools.md` (tool search, programmatic tool calling, code execution with MCP, tool use examples, MCP 2026-07-28 stateless spec, A2A, MCP Apps / AG-UI / A2UI, agent payments, SKILL.md portability), `data-agents.md` (semantic layer before text-to-SQL, Genie, RAG choices incl. agentic search vs GraphRAG), `long-running.md` (generator/evaluator harness, stateless harness + session log + sandbox, durable execution, parallel agents).
+- Evals: `tech-radar-trigger`, `build-agent-data-kpi`.
+
+### Changed
+- `build-agent`: pass^k for user-facing agents, capability vs regression evals, automatic prompt optimization (GEPA/DSPy), OpenTelemetry GenAI conventions, agent registries (Agent 365), model-agnostic design with open-weight options.
+- `metric-definition`: publish definitions to the semantic layer that agents query.
+
 ## [2.2.0] - 2026-10-17
 
 ### Added

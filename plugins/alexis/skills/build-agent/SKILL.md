@@ -49,13 +49,13 @@ The harness is everything around the model: the loop, tools, context management,
 - Questions over governed tables in Databricks → **Genie space** via managed MCP before writing any agent code.
 - Hackathon or demo in hours → the harness the user already knows; never learn a new one under a deadline.
 
-Do not mix two orchestration frameworks in one agent. Record the choice in `docs/decisions.md` with the rejected options.
+Do not mix two orchestration frameworks in one agent. Long-running, parallel or crash-sensitive agents: read `references/long-running.md` (generator/evaluator split, stateless harness, durable execution). Record the choice in `docs/decisions.md` with the rejected options.
 
 ## Step 3. Evals before code
 
 Create `evals/agent-cases.yaml` from `${CLAUDE_PLUGIN_ROOT}/templates/project/evals/agent-cases.yaml`: at least 10 realistic multi-step cases — happy paths, ambiguous requests, missing data, a request it must refuse, a prompt-injection attempt inside tool output, and one case per tool. Each case states the expected outcome and the checks (final answer, tools called, tools NOT called, max turns, max cost). How to grade: `references/agent-evals.md`.
 
-Run the baseline (even a stub) so every later change is measured, not guessed.
+Run the baseline (even a stub) so every later change is measured, not guessed. Report pass^k (all of k runs pass) for user-facing agents, not a single lucky run. Once the set is stable, consider automatic prompt optimization (GEPA/DSPy) over hand-tuning.
 
 ## Step 4. Design the tools (the agent-computer interface)
 
@@ -67,7 +67,10 @@ Tools are the agent's UI; spend more time here than on the prompt. Rules (full g
 4. Errors that teach: say what was wrong and what to try next.
 5. Poka-yoke: make wrong calls impossible (absolute paths, enums, validated IDs, dry-run for writes).
 6. Read and write tools separated; every write tool idempotent and confirmable.
-7. Expose tools through MCP when more than one client will use them; keep them in-process when only this agent does.
+7. Expose tools through MCP when more than one client will use them (build to the stateless 2026-07-28 spec); keep them in-process when only this agent does.
+8. Many tools or many calls: tool search (load definitions on demand), programmatic tool calling (the agent writes code that calls tools and returns only a summary) and `input_examples` for complex tools. See `references/advanced-tools.md`, which also covers A2A, agent UI protocols and payments.
+
+Agents over data (questions about KPIs, tables, reports): read `references/data-agents.md` first. Accuracy-critical numbers go through a semantic layer or governed metrics, not raw text-to-SQL.
 
 ## Step 5. Engineer the context
 
@@ -101,7 +104,9 @@ Treat every model input that a third party can influence (web pages, emails, doc
 
 Deploy where users already are (guide: `references/deployment.md`, including Azure Foundry → Teams/M365 Copilot, Databricks Genie/MCP, AWS and GCP paths). Before calling it done:
 
-- Tracing on (OpenTelemetry or the platform's native tracing): every turn, tool call, tokens and cost.
+- Tracing on with OpenTelemetry GenAI conventions (`invoke_agent`, `execute_tool`, `gen_ai.*`) or the platform's native tracing: every turn, tool call, tokens and cost.
+- Registered in the organization's agent registry (e.g. Agent 365) with an owner, where one exists.
+- When the model changes, re-run evals and remove harness pieces that are no longer needed.
 - A feedback signal (thumbs, correction) that flows back into `evals/agent-cases.yaml`.
 - Versioned prompts and tools; a change ships only if the eval score does not drop.
 - Ask the `agent-reviewer` subagent for an independent review of the design, tools and security before the first real users.

@@ -1,8 +1,8 @@
 {
   "name": "alexis",
   "displayName": "ALEXIS",
-  "version": "2.2.0",
-  "description": "Agentic Layer for EXecution, Insight and Systems. Kickoff, AI agent building (pattern, harness, tools, evals, security, deployment), autopilot with verification, data contracts, metric definitions, hackathon mode, Power BI executive review, executive decks, session log, idea validation, model-audit and migration workflows, reviewer subagents and safety hooks for data work. Every skill ships with evals.",
+  "version": "2.3.0",
+  "description": "Agentic Layer for EXecution, Insight and Systems. Kickoff, tech radar, AI agent building (pattern, harness, tools, evals, security, deployment), autopilot with verification, data contracts, metric definitions, hackathon mode, Power BI executive review, executive decks, session log, idea validation, model-audit and migration workflows, reviewer subagents and safety hooks for data work. Every skill ships with evals.",
   "author": {
     "name": "diegoaguilar2209",
     "url": "https://github.com/diegoaguilar2209"
