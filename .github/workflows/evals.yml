@@ -31,7 +31,7 @@ jobs:
             --runs "${{ github.event.inputs.runs || '3' }}" \
             --threshold 0.8 --max-cost-usd 10 --judge-model sonnet \
             --report eval-report.html --json eval-result.json
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: always()
         with:
           name: eval-report
