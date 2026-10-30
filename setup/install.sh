@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Install ALEXIS for Claude Code. Works on Linux, macOS and WSL2.
+# Install ALEXIS for Claude Code. Tested on WSL2 (Ubuntu); Linux and macOS should work but are untested.
 # Usage: bash setup/install.sh            -> core
 #        bash setup/install.sh --full     -> core + platform plugins (Azure, Microsoft Docs, GitHub, dbt, Power BI, Databricks)
 set -euo pipefail

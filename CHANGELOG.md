@@ -4,6 +4,12 @@ All notable changes to ALEXIS. Format: [Keep a Changelog](https://keepachangelog
 
 ## [Unreleased]
 
+### Changed
+- README (English and Spanish) rewritten: goal, quick start, how it works, every piece grouped by stage, repository structure, recommended plugins (official and community) and tested platforms (Windows with WSL2).
+
+### Added
+- `CODE_OF_CONDUCT.md` (Contributor Covenant 2.1).
+
 ## [2.3.0] - 2026-10-17
 
 ### Added
