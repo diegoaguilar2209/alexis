@@ -18,7 +18,7 @@ Copied to `~/.claude/CLAUDE.md` by `setup/install.sh`. Applies to every project.
 - Verify by running things, not by assuming. Never claim something passes without showing the output.
 
 ## My conventions (respect them)
-- Python: virtualenv `env/`; dependencies with pip-tools (`requirements.in` → `pip-compile` → `pip-sync`); never edit `requirements.txt` by hand or `pip install` loosely.
+- Python: virtualenv `env/`; dependencies with uv (`requirements.in` → `uv pip compile` → `uv pip sync`); never edit `requirements.txt` by hand or `pip install` loosely.
 - Formatting: black + isort (black profile) + pyupgrade; types with mypy; enforced by pre-commit.
 - Config: `.env` per environment for services; versions always pinned, never `latest`.
 - Secrets never in Git: `.secrets/*.example` as templates.

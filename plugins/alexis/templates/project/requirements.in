@@ -1,3 +1,3 @@
 # Direct project dependencies (pin only when needed).
-# Compile:  pip-compile requirements.in
-# Install:  pip-sync requirements.txt requirements-dev.txt
+# Compile:  uv pip compile requirements.in -o requirements.txt --python-version 3.12
+# Install:  uv pip sync requirements.txt requirements-dev.txt

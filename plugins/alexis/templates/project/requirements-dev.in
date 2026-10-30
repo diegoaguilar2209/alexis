@@ -1,6 +1,6 @@
-# Development tools. Compile with: pip-compile requirements-dev.in
+# Development tools.
+# Compile:  uv pip compile requirements-dev.in -o requirements-dev.txt --python-version 3.12
 -c requirements.txt
-pip-tools
 pre-commit
 pytest
 black

@@ -23,8 +23,8 @@
 - Commits: `type: description` (feat, fix, refactor, docs, chore, test).
 
 ## Commands
-- Environment: `python -m venv env && source env/bin/activate && pip install pip-tools`
-- Dependencies: edit `requirements.in` → `pip-compile requirements.in` → `pip-sync requirements.txt requirements-dev.txt`
+- Environment: `uv venv env && source env/bin/activate`
+- Dependencies: edit `requirements.in` → `uv pip compile requirements.in -o requirements.txt --python-version 3.12` (same for `requirements-dev.in`) → `uv pip sync requirements.txt requirements-dev.txt`
 - Quality: `pre-commit run --all-files`
 - Tests: `pytest -q`
 - Evals: `python evals/run.py`
