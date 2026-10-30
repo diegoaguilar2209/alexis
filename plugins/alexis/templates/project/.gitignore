@@ -57,6 +57,7 @@ tags
 
 # Claude Code: local configuration
 .claude/settings.local.json
+node_modules/
 .mcp.local.json
 
 # Secrets (only the examples are versioned)
