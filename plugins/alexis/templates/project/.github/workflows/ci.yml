@@ -6,17 +6,27 @@ on:
     branches: [main]
   pull_request:
 
+env:
+  GITLEAKS_VERSION: "8.30.1"
+
 jobs:
   calidad:
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0 # gitleaks scans history
+          fetch-depth: 0 # gitleaks detect scans the full history
 
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+
+      - name: gitleaks (full history)
+        run: |
+          mkdir -p "$RUNNER_TEMP/bin"
+          curl -sSfL "https://github.com/gitleaks/gitleaks/releases/download/v${GITLEAKS_VERSION}/gitleaks_${GITLEAKS_VERSION}_linux_x64.tar.gz" \
+            | tar -xz -C "$RUNNER_TEMP/bin" gitleaks
+          "$RUNNER_TEMP/bin/gitleaks" detect --redact --verbose
 
       - name: pre-commit (black, isort, mypy, gitleaks, hadolint...)
         uses: pre-commit/action@v3.0.1
