@@ -36,7 +36,7 @@ jobs:
           path: ~/.cache/pre-commit
           key: pre-commit-${{ hashFiles('.pre-commit-config.yaml') }}
 
-      - name: pre-commit (todos los hooks)
+      - name: pre-commit (black, isort, mypy, gitleaks, hadolint...)
         run: uvx pre-commit run --all-files --show-diff-on-failure
 
       - name: Dependencies (uv)
