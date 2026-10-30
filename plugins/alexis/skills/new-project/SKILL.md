@@ -50,7 +50,7 @@ If there is no git repo, run `git init` first (pre-commit needs it). Then copy `
 - `.claude/rules/`: keep only the rules for this project's stack; delete the rest.
 - `.mcp.json.example`: copy to `.mcp.json` with only the servers this project uses; credentials always via environment variables.
 - `.gitignore`, `.pre-commit-config.yaml`, `.github/workflows/ci.yml`: run `pre-commit install`.
-- `requirements.in` / `requirements-dev.in` (Python projects): create the `env/` virtualenv, install pip-tools, add direct dependencies to the `.in` files, compile with `pip-compile`, install with `pip-sync`. Never a loose `pip install`.
+- `requirements.in` / `requirements-dev.in` (Python projects): create the `env/` virtualenv, add direct dependencies to the `.in` files, compile with `uv pip compile` (the `pip-compile` pre-commit hook does it too), install with `uv pip sync`. Never a loose `pip install`.
 
 Suggested layout per archetype:
 

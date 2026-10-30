@@ -4,7 +4,7 @@ repos:
     rev: v3.19.1
     hooks:
       - id: pyupgrade
-        args: [--py310-plus]
+        args: [--py312-plus]
 
   # isort: sorts and groups imports; profile aligned with Black.
   - repo: https://github.com/pre-commit/mirrors-isort
@@ -49,18 +49,36 @@ repos:
       - id: trailing-whitespace
         args: ["--markdown-linebreak-ext=md"]
 
-  # pip-compile: keeps requirements.txt in sync with requirements.in.
-  - repo: https://github.com/jazzband/pip-tools
-    rev: 7.4.1
+  # pip-compile (uv): keeps requirements.txt / requirements-dev.txt in sync with their .in files.
+  # Portable: pre-commit installs uv itself, no binaries from the host machine are needed.
+  - repo: https://github.com/astral-sh/uv-pre-commit
+    rev: 0.13.6
     hooks:
       - id: pip-compile
-        files: ^requirements\.(in|txt)$
+        name: pip-compile requirements.in
+        args:
+          [requirements.in, -o, requirements.txt, --python-version, "3.12", -q]
+      - id: pip-compile
+        name: pip-compile requirements-dev.in
+        args:
+          [
+            requirements-dev.in,
+            -o,
+            requirements-dev.txt,
+            --python-version,
+            "3.12",
+            -q,
+          ]
+        files: ^requirements(-dev)?\.(in|txt)$
 
   # gitleaks: blocks credentials before they reach GitHub.
   - repo: https://github.com/gitleaks/gitleaks
-    rev: v8.21.2
+    rev: v8.30.1
     hooks:
       - id: gitleaks
+        # pre-commit downloads its own Go toolchain, so the host Go version is irrelevant.
+        # Must be >= the `go` line of gitleaks' go.mod; raise it when bumping rev.
+        language_version: "1.25.0"
 
   # hadolint: Dockerfile linter.
   - repo: https://github.com/hadolint/hadolint

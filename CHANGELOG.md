@@ -7,6 +7,9 @@ All notable changes to ALEXIS. Format: [Keep a Changelog](https://keepachangelog
 ### Changed
 - README (English and Spanish) rewritten: goal, quick start, how it works, every piece grouped by stage, repository structure, recommended plugins (official and community) and tested platforms (Windows with WSL2).
 
+### Fixed
+- Project template: `pip-compile` now uses `astral-sh/uv-pre-commit` (Python 3.12) for `requirements.in` and `requirements-dev.in`; gitleaks runs with a pre-commit-managed Go toolchain and CI scans the full history; `node_modules/` ignored; `pyproject.toml` with pytest settings; CI installs with uv and tolerates pytest exit 5; actions bumped (`checkout@v7`, `setup-python@v7`) and `dependabot.yml` added; Python 3.12 pinned; template files are prettier-clean.
+
 ### Added
 - `CODE_OF_CONDUCT.md` (Contributor Covenant 2.1).
 

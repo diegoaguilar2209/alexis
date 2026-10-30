@@ -6,30 +6,47 @@ on:
     branches: [main]
   pull_request:
 
+env:
+  GITLEAKS_VERSION: "8.30.1"
+
 jobs:
   calidad:
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
-          fetch-depth: 0 # gitleaks scans history
+          fetch-depth: 0 # gitleaks detect scans the full history
 
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v7
         with:
           python-version: "3.12"
 
-      - name: pre-commit (black, isort, mypy, gitleaks, hadolint...)
-        uses: pre-commit/action@v3.0.1
-
-      - name: Dependencies (pip-tools)
+      - name: gitleaks (full history)
         run: |
-          pip install pip-tools
-          if [ -f requirements.txt ]; then pip-sync requirements.txt; fi
-          if [ -f requirements-dev.txt ]; then pip install -r requirements-dev.txt; fi
+          mkdir -p "$RUNNER_TEMP/bin"
+          curl -sSfL "https://github.com/gitleaks/gitleaks/releases/download/v${GITLEAKS_VERSION}/gitleaks_${GITLEAKS_VERSION}_linux_x64.tar.gz" \
+            | tar -xz -C "$RUNNER_TEMP/bin" gitleaks
+          "$RUNNER_TEMP/bin/gitleaks" detect --redact --verbose
+
+      - uses: astral-sh/setup-uv@v10.3.3
+
+      # Not pre-commit/action: it bundles actions/cache@v4 (Node 20, deprecated).
+      - uses: actions/cache@v6
+        with:
+          path: ~/.cache/pre-commit
+          key: pre-commit-${{ hashFiles('.pre-commit-config.yaml') }}
+
+      - name: pre-commit (black, isort, mypy, gitleaks, hadolint...)
+        run: uvx pre-commit run --all-files --show-diff-on-failure
+
+      - name: Dependencies (uv)
+        run: |
+          uv venv env
+          uv pip sync requirements.txt requirements-dev.txt -p env/bin/python
 
       - name: Tests
-        run: |
-          if [ -d tests ]; then pip install pytest && pytest -q; else echo "No tests yet"; fi
+        # pytest exits with 5 when no tests were collected; that is fine until the first test exists.
+        run: env/bin/pytest -q || [ $? -eq 5 ]
 
       - name: Validate docker-compose
         run: |
