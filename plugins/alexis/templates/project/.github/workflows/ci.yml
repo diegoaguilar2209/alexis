@@ -31,15 +31,16 @@ jobs:
       - name: pre-commit (black, isort, mypy, gitleaks, hadolint...)
         uses: pre-commit/action@v3.0.1
 
-      - name: Dependencies (pip-tools)
+      - uses: astral-sh/setup-uv@v10
+
+      - name: Dependencies (uv)
         run: |
-          pip install pip-tools
-          if [ -f requirements.txt ]; then pip-sync requirements.txt; fi
-          if [ -f requirements-dev.txt ]; then pip install -r requirements-dev.txt; fi
+          uv venv env
+          uv pip sync requirements.txt requirements-dev.txt -p env/bin/python
 
       - name: Tests
-        run: |
-          if [ -d tests ]; then pip install pytest && pytest -q; else echo "No tests yet"; fi
+        # pytest exits with 5 when no tests were collected; that is fine until the first test exists.
+        run: env/bin/pytest -q || [ $? -eq 5 ]
 
       - name: Validate docker-compose
         run: |
