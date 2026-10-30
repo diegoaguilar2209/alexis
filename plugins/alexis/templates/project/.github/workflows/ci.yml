@@ -28,10 +28,16 @@ jobs:
             | tar -xz -C "$RUNNER_TEMP/bin" gitleaks
           "$RUNNER_TEMP/bin/gitleaks" detect --redact --verbose
 
-      - name: pre-commit (black, isort, mypy, gitleaks, hadolint...)
-        uses: pre-commit/action@v3.0.1
-
       - uses: astral-sh/setup-uv@v10.3.3
+
+      # Not pre-commit/action: it bundles actions/cache@v4 (Node 20, deprecated).
+      - uses: actions/cache@v6
+        with:
+          path: ~/.cache/pre-commit
+          key: pre-commit-${{ hashFiles('.pre-commit-config.yaml') }}
+
+      - name: pre-commit (black, isort, mypy, gitleaks, hadolint...)
+        run: uvx pre-commit run --all-files --show-diff-on-failure
 
       - name: Dependencies (uv)
         run: |
