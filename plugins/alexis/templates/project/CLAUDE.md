@@ -8,7 +8,7 @@
 
 ## Stack
 - Data platform: <Databricks (Unity Catalog) | BigQuery | Snowflake | Postgres>.
-- Languages: Python 3.11+, SQL (<dialect>), PySpark.
+- Languages: Python 3.12, SQL (<dialect>), PySpark.
 - Visualization: <Power BI | other>.
 
 ## Architecture

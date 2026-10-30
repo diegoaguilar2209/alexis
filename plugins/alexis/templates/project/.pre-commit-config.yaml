@@ -4,7 +4,7 @@ repos:
     rev: v3.19.1
     hooks:
       - id: pyupgrade
-        args: [--py310-plus]
+        args: [--py312-plus]
 
   # isort: sorts and groups imports; profile aligned with Black.
   - repo: https://github.com/pre-commit/mirrors-isort
