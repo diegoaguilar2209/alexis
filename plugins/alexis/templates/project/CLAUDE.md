@@ -31,7 +31,7 @@
 - Environment: `uv venv env && source env/bin/activate`
 - Dependencies: edit `requirements.in` → `uv pip compile requirements.in -o requirements.txt --python-version 3.12` (same for `requirements-dev.in`) → `uv pip sync requirements.txt requirements-dev.txt`
 - Quality: `pre-commit run --all-files`
-- Antes de cada commit: `pre-commit run --all-files` y `git add` de lo que reformatee
+- Before every commit: `pre-commit run --all-files` and `git add` whatever it reformats
 - Tests: `pytest -q`
 - Evals: `python evals/run.py`
 - Deploy dev: `databricks bundle deploy -t dev`
