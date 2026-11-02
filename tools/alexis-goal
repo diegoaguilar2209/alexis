@@ -10,7 +10,7 @@
 # Notes:
 # - Uses `claude -p "/goal ..."`, which loops until the evaluator judges the goal met or impossible.
 # - Headless runs do NOT wait for usage-limit resets. For long runs on a Pro/Max plan, prefer an
-#   interactive session (tmux) with /alexis:autopilot: it continues automatically after the reset.
+#   interactive session (tmux) with /alexis:project continue: it continues automatically after the reset.
 # - --budget maps to --max-budget-usd (API billing only).
 # - Logs go to .alexis/logs/goal-<timestamp>.jsonl; a readable summary prints as it runs.
 set -euo pipefail

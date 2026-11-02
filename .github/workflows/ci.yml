@@ -34,7 +34,7 @@ jobs:
       - name: Shell scripts
         run: |
           sudo apt-get update -qq && sudo apt-get install -y -qq shellcheck
-          shellcheck -S warning tools/alexis-wt tools/alexis-goal setup/install.sh plugins/alexis/scripts/run-py.sh
+          shellcheck -S warning tools/alexis-goal setup/install.sh plugins/alexis/scripts/run-py.sh
 
       - name: Hook and tool tests
         run: |

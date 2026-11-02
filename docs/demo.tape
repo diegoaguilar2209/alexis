@@ -12,7 +12,7 @@ Set TypingSpeed 40ms
 Type "mkdir churn-demo && cd churn-demo && git init -q && claude"
 Enter
 Sleep 4s
-Type "/alexis:new-project Daily churn pipeline from Postgres to Databricks with a Power BI view for retention leads"
+Type "/alexis:project Daily churn pipeline from Postgres to Databricks with a Power BI view for retention leads"
 Enter
 Sleep 25s
 Type "Assume: KPI churn 4.1% to 3.5% in Q1, users are retention leads, 2M rows/day, deliverable in 4 weeks. Write the spec and plan."

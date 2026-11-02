@@ -9,7 +9,7 @@ Copied to `~/.claude/CLAUDE.md` by `setup/install.sh`. Applies to every project.
 
 ## Environment
 - <e.g. WSL2 (Ubuntu) + vim + tmux>. Terminal first; do not assume an IDE or GUI.
-- Parallel work: one tmux window per git worktree (`alexis-wt`).
+- Parallel work: native subagents, each in its own worktree; tmux keeps long sessions alive.
 
 ## How to work with me
 - Direct and concise: answer first, no preamble, no recap of what you did.
@@ -38,10 +38,9 @@ Copied to `~/.claude/CLAUDE.md` by `setup/install.sh`. Applies to every project.
 - Watch the status line: context %, 5-hour and weekly plan usage. Plan heavy parallel work right after a 5-hour reset.
 
 ## ALEXIS
-- New project: `/alexis:new-project`. Unattended build: `/alexis:autopilot`. Hackathon: `/alexis:hackathon`.
+- Any project (idea, product, hackathon, data work): `/alexis:project`. Resume or keep building alone: `/alexis:project continue`. End of session: `/alexis:project close`.
 - Shared tables: `/alexis:data-contract`. KPIs that disagree: `/alexis:metric-definition`. Many files at once: `/alexis:migrate`, `/alexis:audit-model`.
-- Power BI review/redesign: `/alexis:powerbi-executive`. Executive deck: `/alexis:exec-deck`. Idea to sell: `/alexis:validate-idea`.
-- End of session: `/alexis:session-log`. Improve this setup: `/alexis:improve`.
+- Power BI review/redesign: `/alexis:powerbi-executive`. Executive deck: `/alexis:exec-deck`. What's new: `/alexis:tech-radar`.
 
 ## Safety (non-negotiable)
 - Never write to or delete in production. Dev or local environments only.

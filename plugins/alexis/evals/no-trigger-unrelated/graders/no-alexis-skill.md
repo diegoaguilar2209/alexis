@@ -1,7 +1,7 @@
 ---
 type: tool_used
 tool: Skill
-input_match: '"skill"\s*:\s*"(?:alexis:)?(new-project|autopilot|hackathon|powerbi-executive|exec-deck|validate-idea|build-agent|tech-radar)"'
+input_match: '"skill"\s*:\s*"(?:alexis:)?(project|powerbi-executive|exec-deck|build-agent|tech-radar|data-contract|metric-definition)"'
 min: 0
 max: 0
 arm: both

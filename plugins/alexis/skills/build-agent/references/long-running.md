@@ -34,4 +34,4 @@ Lessons from a team of parallel Claudes building a C compiler (~2,000 sessions, 
 - READMEs and progress files let each fresh agent orient itself.
 - Passing tests is not proof; humans still verify before deployment.
 
-In Claude Code: `/alexis:autopilot`, dynamic workflows (`/alexis:migrate`, `/alexis:audit-model`) and `alexis-wt` worktrees apply these patterns.
+In Claude Code: the build phase of `/alexis:project` (`/goal` + native subagents in worktrees + verifier) and the dynamic workflows (`/alexis:migrate`, `/alexis:audit-model`) apply these patterns.
