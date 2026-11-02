@@ -9,7 +9,7 @@
     {
       "name": "alexis",
       "source": "./plugins/alexis",
-      "description": "Project kickoff, AI agent building, autopilot with verification, hackathon mode, Power BI executive review, executive decks, session log, idea validation, reviewer subagents and safety hooks."
+      "description": "One command from idea to verified delivery (research, validation, hackathon mode, plan, autonomous build with native subagents, close and self-improvement), plus specialists for AI agents, data contracts, metrics, Power BI, executive decks, reviewer subagents and safety hooks."
     }
   ]
 }

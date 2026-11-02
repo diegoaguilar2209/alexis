@@ -1,6 +1,6 @@
 ---
 name: verifier
-description: Fresh-eyes auditor that checks work against the spec, plan and evals without having written it - runs the verification commands and reports what is wrong or missing. Use before declaring a task or goal done, every few commits during autopilot, and before a demo.
+description: Fresh-eyes auditor that checks work against the spec, plan and evals without having written it - runs the verification commands and reports what is wrong or missing. Use before declaring a task or goal done, every few commits while building alone, and before a demo.
 tools: Read, Grep, Glob, Bash
 model: sonnet
 effort: medium

@@ -80,7 +80,7 @@ def main() -> None:
     week = window("7d", limits.get("seven_day"))
     five_pct = (limits.get("five_hour") or {}).get("used_percentage")
     if five_pct is not None and float(five_pct) >= ALERT:
-        parts.insert(0, f"{RED}! 5h {float(five_pct):.0f}%: save state, /alexis:session-log{RESET}")
+        parts.insert(0, f"{RED}! 5h {float(five_pct):.0f}%: save state, /alexis:project close{RESET}")
     elif five:
         parts.append(five)
     if week:

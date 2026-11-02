@@ -1,8 +1,8 @@
 {
   "name": "alexis",
   "displayName": "ALEXIS",
-  "version": "2.3.0",
-  "description": "Agentic Layer for EXecution, Insight and Systems. Kickoff, tech radar, AI agent building (pattern, harness, tools, evals, security, deployment), autopilot with verification, data contracts, metric definitions, hackathon mode, Power BI executive review, executive decks, session log, idea validation, model-audit and migration workflows, reviewer subagents and safety hooks for data work. Every skill ships with evals.",
+  "version": "3.0.0",
+  "description": "Agentic Layer for EXecution, Insight and Systems. One command, /alexis:project, takes any project from idea to verified delivery: interview, sourced market research and idea validation, hackathon mode, spec, scaffold, evals and plan, then builds alone with native subagents after one approval, and closes by logging impact and improving the skills. Plus specialists: AI agent building, data contracts, metric definitions, Power BI executive review, executive decks, tech radar, model-audit and migration workflows, reviewer subagents and safety hooks. Every skill ships with evals.",
   "author": {
     "name": "diegoaguilar2209",
     "url": "https://github.com/diegoaguilar2209"
@@ -16,7 +16,8 @@
     "databricks",
     "sql",
     "power-bi",
-    "hackathon",
-    "autopilot"
+    "project-lifecycle",
+    "autonomous-agents",
+    "hackathon"
   ]
 }

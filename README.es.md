@@ -30,9 +30,9 @@ mkdir ~/dev/modelo-churn && cd ~/dev/modelo-churn && git init && claude
 ```
 
 ```text
-/alexis:new-project Predecir la fuga de clientes a partir de transacciones y mostrarlo en Power BI
-/alexis:autopilot      # Claude construye hasta que pasan los tests y los evals
-/alexis:session-log    # registra decisiones e impacto al terminar
+/alexis:project Predecir la fuga de clientes a partir de transacciones y mostrarlo en Power BI
+/alexis:project continue   # retoma donde quedó el proyecto (p. ej. "me voy, sigue tú")
+/alexis:project close      # registra decisiones e impacto, y mejora las skills
 ```
 
 ¿Solo el plugin? `claude plugin marketplace add diegoaguilar2209/alexis` y `claude plugin install alexis@alexis`.
@@ -40,15 +40,19 @@ mkdir ~/dev/modelo-churn && cd ~/dev/modelo-churn && git init && claude
 ## Cómo funciona
 
 ```text
- idea ──▶ /alexis:new-project ──▶ spec + repo + CLAUDE.md + evals + plan
-                                         │
-                                         ▼
-          /alexis:autopilot ──▶ construir ─▶ probar ─▶ corregir ─▶ commit   (repite hasta cumplir el objetivo)
-                                         │
-                    el subagente verifier audita con ojos frescos
-                                         │
-                                         ▼
-          /alexis:session-log ──▶ decisiones, impacto y próximos pasos (repo + Obsidian)
+ /alexis:project <idea>
+   entender ─▶ investigar ─▶ validar ─▶ spec + plan + evals   (la profundidad depende del tipo de proyecto)
+                                             │
+                                             ▼
+                                   UNA aprobación tuya
+                                             │
+                                             ▼
+   construye solo: /goal ─▶ probar ─▶ corregir ─▶ commit, hito tras hito
+   (las tareas independientes van a subagentes nativos, cada uno en su worktree;
+    el subagente verifier audita con ojos frescos)
+                                             │
+                                             ▼
+   cierre: decisiones, impacto (repo + Obsidian) y mejoras a las skills
 
  Siempre activo: hook de seguridad (bloquea DROP, force push, deploys a prod…) · lint tras cada edición · barra de estado con límites de uso
 ```
@@ -59,18 +63,13 @@ mkdir ~/dev/modelo-churn && cd ~/dev/modelo-churn && git init && claude
 
 | Etapa | Comando | Qué hace |
 | --- | --- | --- |
-| Empezar | `/alexis:new-project` | Entrevista breve → spec, estructura del repo, CLAUDE.md, evals y plan |
-| | `/alexis:validate-idea` | Pone a prueba una idea de startup o app pagada antes de construir: cliente, quién paga, distribución, experimento más barato |
-| | `/alexis:hackathon` | Método para hackatones: jurado → spec → evals → construcción en paralelo → auditoría → demo |
-| Construir | `/alexis:autopilot` | Trabaja solo hacia criterios medibles, con verificación y checkpoints |
-| | `/alexis:build-agent` | Diseña, construye, evalúa, asegura y despliega agentes de IA (patrón, harness, herramientas, evals, OWASP, Azure/Databricks/AWS/GCP) |
+| Proyecto | `/alexis:project` | De la idea a la entrega verificada: entrevista, investigación y validación (productos), modo hackatón, spec, estructura del repo, evals y plan, una aprobación, y luego construye solo con subagentes; al cerrar registra el impacto y mejora las skills |
+| Especialistas (los llama `project` o tú directamente) | `/alexis:build-agent` | Diseña, construye, evalúa, asegura y despliega agentes de IA (patrón, harness, herramientas, evals, OWASP, Azure/Databricks/AWS/GCP) |
 | Calidad de datos | `/alexis:data-contract` | Esquema, llaves, valores permitidos y frescura de una tabla compartida, con tests que lo hacen cumplir |
 | | `/alexis:metric-definition` | Una sola definición por KPI, trazada de la medida DAX al SQL |
 | Entregar | `/alexis:powerbi-executive` | Audita y rediseña reportes de Power BI: modelo, DAX y diseño de nivel consultora |
 | | `/alexis:exec-deck` | Presentaciones ejecutivas con la conclusión primero y números trazables |
-| Mejorar | `/alexis:session-log` | Registra decisiones, impacto medible y próximos pasos |
-| | `/alexis:improve` | Mejora tu configuración a partir de evidencia: fricción, correcciones repetidas, uso |
-| | `/alexis:tech-radar` | Qué hay de nuevo y qué funciona de verdad en IA, agentes y plataformas de datos, calificado Adoptar/Probar/Evaluar/Evitar |
+| Mantenerse al día | `/alexis:tech-radar` | Qué hay de nuevo y qué funciona de verdad en IA, agentes y plataformas de datos, calificado Adoptar/Probar/Evaluar/Evitar |
 
 ### Workflows, subagentes y hooks
 
@@ -88,7 +87,6 @@ mkdir ~/dev/modelo-churn && cd ~/dev/modelo-churn && git init && claude
 | Herramienta | Qué hace |
 | --- | --- |
 | `alexis-statusline` | Barra de estado: modelo, esfuerzo, contexto, uso de 5 horas y semanal con hora de reinicio |
-| `alexis-wt` | Un worktree de git + una ventana de tmux + una sesión de Claude Code por frente de trabajo |
 | `alexis-goal` | Ejecuciones headless hacia un objetivo, con logs en vivo |
 
 ## Plugins recomendados
@@ -112,11 +110,11 @@ plugins/alexis/
   workflows/       Workflows multiagente: audit-model, migrate
   hooks/           Conexión de los hooks (seguridad antes de cada herramienta, lint después de editar)
   scripts/         El código de los hooks: Python simple que puedes auditar
-  templates/project/  Lo que new-project copia a tu repo: CLAUDE.md, permisos, reglas, pre-commit, CI, evals
+  templates/project/  Lo que /alexis:project copia a tu repo: CLAUDE.md, permisos, reglas, pre-commit, CI, evals
   evals/           Casos de evaluación de cada skill (claude plugin eval)
 setup/             Instaladores y configuración de settings
 templates/user/    ~/.claude/CLAUDE.md inicial (tus preferencias personales)
-tools/             alexis-statusline, alexis-wt, alexis-goal
+tools/             alexis-statusline, alexis-goal
 routines/          Plantillas de rutinas en la nube: revisión de PR, docs desactualizadas, chequeo post-deploy, radar mensual
 telemetry/         Stack local OpenTelemetry + Prometheus + Loki + Grafana con el historial de tokens y costo
 vault/             Bóveda inicial de Obsidian: memoria de largo plazo y registro de impacto profesional
@@ -139,7 +137,7 @@ claude plugin eval . --runs 1 --ablation none --judge-model sonnet   # chequeo r
 claude plugin eval . --judge-model sonnet                            # completo, con vs. sin ALEXIS
 ```
 
-La suite ya encontró problemas reales: la skill de inicio hacía demasiadas preguntas, y autopilot se activaba solo 1 de cada 3 veces con "me voy, sigue tú" hasta que se reescribió su descripción (ahora 3 de 3). Un workflow de GitHub corre la suite a pedido o cada semana con tu secreto `ANTHROPIC_API_KEY`.
+La suite ya encontró problemas reales: la skill de inicio hacía demasiadas preguntas, y la skill de construcción autónoma se activaba solo 1 de cada 3 veces con "me voy, sigue tú" hasta que se reescribió su descripción (ahora 3 de 3). Ambos chequeos siguen vivos en los casos `project-*`. Un workflow de GitHub corre la suite a pedido o cada semana con tu secreto `ANTHROPIC_API_KEY`.
 
 ## Modelos, tokens y límites
 

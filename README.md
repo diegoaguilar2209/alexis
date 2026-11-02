@@ -30,9 +30,9 @@ mkdir ~/dev/churn-model && cd ~/dev/churn-model && git init && claude
 ```
 
 ```text
-/alexis:new-project Predict customer churn from transactions and show it in Power BI
-/alexis:autopilot      # Claude builds until tests and evals pass
-/alexis:session-log    # record decisions and impact when you stop
+/alexis:project Predict customer churn from transactions and show it in Power BI
+/alexis:project continue   # resume where the project stands (e.g. "I'm stepping away, keep going")
+/alexis:project close      # log decisions and impact, and improve the skills
 ```
 
 Only want the plugin? `claude plugin marketplace add diegoaguilar2209/alexis` and `claude plugin install alexis@alexis`.
@@ -40,15 +40,19 @@ Only want the plugin? `claude plugin marketplace add diegoaguilar2209/alexis` an
 ## How it works
 
 ```text
- idea ──▶ /alexis:new-project ──▶ spec + repo + CLAUDE.md + evals + plan
-                                         │
-                                         ▼
-          /alexis:autopilot ──▶ build ─▶ test ─▶ fix ─▶ commit   (loops until the goal is met)
-                                         │
-                       verifier subagent audits with fresh eyes
-                                         │
-                                         ▼
-          /alexis:session-log ──▶ decisions, impact and next steps (repo + Obsidian)
+ /alexis:project <idea>
+   understand ─▶ research ─▶ validate ─▶ spec + plan + evals   (depth depends on the project type)
+                                             │
+                                             ▼
+                                   ONE approval from you
+                                             │
+                                             ▼
+   build alone: /goal ─▶ test ─▶ fix ─▶ commit, milestone after milestone
+   (independent tasks go to native subagents, each in its own worktree;
+    the verifier subagent audits with fresh eyes)
+                                             │
+                                             ▼
+   close: decisions, impact (repo + Obsidian) and improvements to the skills
 
  Always on: safety hook (blocks DROP, force push, prod deploys…) · lint after every edit · status line with usage limits
 ```
@@ -59,18 +63,13 @@ Only want the plugin? `claude plugin marketplace add diegoaguilar2209/alexis` an
 
 | Stage | Command | What it does |
 | --- | --- | --- |
-| Start | `/alexis:new-project` | Short interview → spec, repo scaffold, CLAUDE.md, evals and plan |
-| | `/alexis:validate-idea` | Tests a startup or paid-app idea before you build: customer, who pays, distribution, cheapest experiment |
-| | `/alexis:hackathon` | Hackathon playbook: judges → spec → evals → parallel build → audit → demo |
-| Build | `/alexis:autopilot` | Works alone toward measurable criteria, with verification and checkpoints |
-| | `/alexis:build-agent` | Designs, builds, evaluates, secures and deploys AI agents (pattern, harness, tools, evals, OWASP, Azure/Databricks/AWS/GCP) |
+| Project | `/alexis:project` | Idea to verified delivery: interview, research and validation (products), hackathon mode, spec, scaffold, evals and plan, one approval, then builds alone with subagents; closes by logging impact and improving the skills |
+| Specialists (called by `project`, or directly) | `/alexis:build-agent` | Designs, builds, evaluates, secures and deploys AI agents (pattern, harness, tools, evals, OWASP, Azure/Databricks/AWS/GCP) |
 | Data quality | `/alexis:data-contract` | Schema, keys, allowed values and freshness of a shared table, enforced by tests |
 | | `/alexis:metric-definition` | One definition per KPI, traced from the DAX measure to the SQL |
 | Deliver | `/alexis:powerbi-executive` | Audits and redesigns Power BI reports: model, DAX and consulting-grade design |
 | | `/alexis:exec-deck` | Conclusion-first executive presentations with traceable numbers |
-| Improve | `/alexis:session-log` | Logs decisions, measurable impact and next steps |
-| | `/alexis:improve` | Improves your setup from evidence: friction, repeated corrections, usage |
-| | `/alexis:tech-radar` | What's new and what actually works in AI, agents and data platforms, rated Adopt/Trial/Assess/Hold |
+| Stay current | `/alexis:tech-radar` | What's new and what actually works in AI, agents and data platforms, rated Adopt/Trial/Assess/Hold |
 
 ### Workflows, subagents and hooks
 
@@ -88,7 +87,6 @@ Only want the plugin? `claude plugin marketplace add diegoaguilar2209/alexis` an
 | Tool | What it does |
 | --- | --- |
 | `alexis-statusline` | Status line: model, effort, context bar, 5-hour and weekly usage with reset times |
-| `alexis-wt` | One git worktree + one tmux window + one Claude Code session per workstream |
 | `alexis-goal` | Headless runs toward a goal, with live logs |
 
 ## Recommended plugins
@@ -112,11 +110,11 @@ plugins/alexis/
   workflows/       Multi-agent workflows: audit-model, migrate
   hooks/           Hook wiring (safety before tool calls, lint after edits)
   scripts/         The hooks' code: plain Python you can audit
-  templates/project/  What new-project copies into your repo: CLAUDE.md, permissions, rules, pre-commit, CI, evals
+  templates/project/  What /alexis:project copies into your repo: CLAUDE.md, permissions, rules, pre-commit, CI, evals
   evals/           Eval cases for every skill (claude plugin eval)
 setup/             Installers and settings configuration
 templates/user/    Starter ~/.claude/CLAUDE.md (your personal preferences)
-tools/             alexis-statusline, alexis-wt, alexis-goal
+tools/             alexis-statusline, alexis-goal
 routines/          Cloud routine templates: PR review, docs drift, post-deploy check, monthly radar
 telemetry/         Local OpenTelemetry + Prometheus + Loki + Grafana stack for token and cost history
 vault/             Obsidian vault starter: long-term memory and career impact log
@@ -139,7 +137,7 @@ claude plugin eval . --runs 1 --ablation none --judge-model sonnet   # quick che
 claude plugin eval . --judge-model sonnet                            # full, with vs. without ALEXIS
 ```
 
-The suite has already caught real problems: the kickoff skill asked too many questions, and autopilot fired only 1 time in 3 on "I'm stepping away, keep going" until its description was rewritten (now 3 in 3). A GitHub workflow runs the suite on demand or weekly with your `ANTHROPIC_API_KEY` secret.
+The suite has already caught real problems: the kickoff skill asked too many questions, and the autonomous-build skill fired only 1 time in 3 on "I'm stepping away, keep going" until its description was rewritten (now 3 in 3). Both checks live on in the `project-*` cases. A GitHub workflow runs the suite on demand or weekly with your `ANTHROPIC_API_KEY` secret.
 
 ## Models, tokens and limits
 

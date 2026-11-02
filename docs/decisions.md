@@ -1,5 +1,14 @@
 # Decisiones
 
+## 2026-11-01
+
+- Un solo comando, `/alexis:project`, para todo el ciclo de un proyecto. Razón: `new-project`, `validate-idea`, `hackathon`, `autopilot`, `session-log` e `improve` eran etapas de un mismo flujo, y obligaban al usuario a saber qué comando tocaba. Ahora Claude decide la profundidad de cada fase según el tipo de proyecto.
+- Autonomía: una sola aprobación (spec + plan + condición de objetivo) y luego construye solo. Se detiene solo ante paradas duras. Las decisiones reversibles se registran en `docs/decisions.md` en vez de preguntarse.
+- El estado vive en la línea `Phase:` de `docs/plan.md`. Es legible por humanos, versionado con git y permite retomar sin memoria de sesión.
+- Se elimina `alexis-wt`. Claude Code orquesta subagentes nativos con `isolation: "worktree"`, así que tmux + worktrees manuales ya no aportan. `alexis-goal` se mantiene para corridas headless.
+- Se mantienen las skills especialistas (`build-agent`, `data-contract`, `metric-definition`, `powerbi-executive`, `exec-deck`, `tech-radar`) como skills separadas: son conocimiento de dominio que `project` carga cuando una tarea lo necesita, y también se usan solas.
+- Cada mejora a una skill de ALEXIS que proponga el cierre trae un caso de eval que habría detectado el problema.
+
 ## 2026-10-30
 
 - Template: pip-compile vía `astral-sh/uv-pre-commit` (0.13.6), no pip-tools. Razón: el hook de pip-tools 7.4.1 falla con el pip actual. Dos hooks: `requirements.in` y `requirements-dev.in`, ambos con `--python-version 3.12`.

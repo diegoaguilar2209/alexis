@@ -13,6 +13,17 @@ All notable changes to ALEXIS. Format: [Keep a Changelog](https://keepachangelog
 ### Added
 - `CODE_OF_CONDUCT.md` (Contributor Covenant 2.1).
 
+## [3.0.0] - 2026-11-01
+
+### Changed (breaking)
+- One command for the whole project lifecycle: `/alexis:project` replaces `new-project`, `validate-idea`, `hackathon`, `autopilot`, `session-log` and `improve`. It understands (one round of at most 5 questions), researches and validates when the project is a product, plans, asks for ONE approval and then builds alone milestone after milestone until the evals pass, stopping only for hard stops (irreversible or production actions, money or credentials, employer conflict, scope change, missing access, the same error three times). `close` logs decisions and impact and proposes evidence-based edits to the skills, each with an eval case. State lives in the `Phase:` line of `docs/plan.md`, so re-running the command resumes.
+- Parallel work uses Claude Code's native subagents, each in its own worktree with a self-contained brief and the specialist skill to load. The `alexis-wt` tool is removed (the installer deletes its old link).
+
+### Added
+- Sourced market research for products (`project/references/research.md`): landscape from primary sources, reverse engineering of the leaders, customer journeys by role, single-vertical MVP, staged architecture with real costs and adoption triggers for heavy tools like Kafka, business model, roadmap and risks.
+- The scaffold adapts to non-Python stacks (stack rules file, matching CI; Python only where it lives).
+- Evals: `project-kickoff`, `project-kickoff-es`, `project-validate`, `project-hackathon`, `project-autonomy` (migrated from the old skills), plus `project-research` and `project-resume`.
+
 ## [2.3.0] - 2026-10-17
 
 ### Added

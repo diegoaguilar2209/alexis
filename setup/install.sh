@@ -48,9 +48,11 @@ else
   echo "3/5 Platform plugins: skipped (use --full)"
 fi
 
-echo "4/5 Command-line tools (alexis-wt, alexis-goal, alexis-statusline)"
+echo "4/5 Command-line tools (alexis-goal, alexis-statusline)"
 mkdir -p "$HOME/.local/bin"
-for tool in alexis-wt alexis-goal alexis-statusline; do
+# alexis-wt was removed in 3.0.0 (native subagents with worktrees replace it)
+[[ -L "$HOME/.local/bin/alexis-wt" ]] && rm -f "$HOME/.local/bin/alexis-wt"
+for tool in alexis-goal alexis-statusline; do
   ln -sf "$REPO_DIR/tools/$tool" "$HOME/.local/bin/$tool"
 done
 case ":$PATH:" in *":$HOME/.local/bin:"*) ;; *) echo "  Add ~/.local/bin to your PATH (e.g. in ~/.bashrc)";; esac
@@ -65,4 +67,4 @@ else
   echo "  Copied. Fill in the 'About me' section and ALEXIS_VAULT."
 fi
 
-echo "Done. Open Claude Code in an empty folder and type: /alexis:new-project <your idea>"
+echo "Done. Open Claude Code in an empty folder and type: /alexis:project <your idea>"
