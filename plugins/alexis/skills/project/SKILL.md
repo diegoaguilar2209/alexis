@@ -16,7 +16,7 @@ understand → research → validate → spec + plan ──▶ APPROVAL ──�
 
 Read `docs/plan.md`. Its first line is `Phase: <understand|research|validate|plan|build|done>`.
 
-- No file, but the user pasted a plan in the message: treat the pasted text as `docs/plan.md` and resume from its `Phase:` line. Never stop because the file is missing from the workspace; write it there when you start working.
+- No file, but the user pasted a plan in the message: treat the pasted text as `docs/plan.md` and resume from its `Phase:` line. Never stop because the file is missing from the workspace; write it there when you start working. The same holds for a missing spec or code when the user says the spec is approved: the pasted plan is authoritative, it is not "missing access". Recreate `docs/plan.md`, note the assumption in `docs/decisions.md`, state the `/goal` condition for the next pending task and start with its failing test, without asking again.
 - No file and nothing pasted: start at phase 1.
 - File exists: resume that phase and say in one line where you are and what comes next.
 - `$ARGUMENTS` = `close`: go to phase 6.

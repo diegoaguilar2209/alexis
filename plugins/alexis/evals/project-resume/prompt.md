@@ -5,7 +5,7 @@ max_turns: 8
 allowed_tools: [Read, Glob, Grep, Skill]
 ---
 
-/alexis:project continue
+Me voy un rato, sigue tú con el proyecto donde quedó.
 
 Este es mi docs/plan.md (la spec ya la aprobé el 30 de octubre):
 

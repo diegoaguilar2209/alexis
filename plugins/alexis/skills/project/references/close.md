@@ -35,7 +35,11 @@ Classify each problem and pick the fix:
 
 For each: the evidence (quote or file), the exact diff, the expected effect. Every change to an ALEXIS skill comes with an eval case in `plugins/alexis/evals/` that would have caught the problem.
 
-## 4. Share back
+## 4. Eval cost policy
+
+When a skill changes, run only its cases (`--case`), `--runs 1`. The quick suite (`--runs 1 --ablation none`) runs before merging; the full suite only before a release. Always pass `--max-cost-usd`.
+
+## 5. Share back
 
 If a fix is generic (useful to anyone, no personal or employer data), offer to open a pull request to the ALEXIS repository: https://github.com/diegoaguilar2209/alexis
 
