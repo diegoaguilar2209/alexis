@@ -1,7 +1,7 @@
 repos:
   # pyupgrade: upgrades syntax to modern Python (f-strings, collection types, etc.).
   - repo: https://github.com/asottile/pyupgrade
-    rev: v3.19.1
+    rev: v3.22.0
     hooks:
       - id: pyupgrade
         args: [--py312-plus]
@@ -15,14 +15,14 @@ repos:
 
   # black: Python code formatter.
   - repo: https://github.com/psf/black
-    rev: 25.1.0
+    rev: 26.10.1
     hooks:
       - id: black
         language_version: python3
 
   # mypy: static type checking.
   - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v1.15.0
+    rev: v2.4.1
     hooks:
       - id: mypy
         args: [--ignore-missing-imports]
@@ -36,7 +36,7 @@ repos:
   #  - debug-statements: forgotten pdb/breakpoint
   #  - end-of-file-fixer / trailing-whitespace: whitespace cleanup
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v5.0.0
+    rev: v6.0.0
     hooks:
       - id: check-docstring-first
       - id: check-added-large-files
@@ -52,7 +52,7 @@ repos:
   # pip-compile (uv): keeps requirements.txt / requirements-dev.txt in sync with their .in files.
   # Portable: pre-commit installs uv itself, no binaries from the host machine are needed.
   - repo: https://github.com/astral-sh/uv-pre-commit
-    rev: 0.13.6
+    rev: 0.13.7
     hooks:
       - id: pip-compile
         name: pip-compile requirements.in
@@ -73,7 +73,7 @@ repos:
 
   # gitleaks: blocks credentials before they reach GitHub.
   - repo: https://github.com/gitleaks/gitleaks
-    rev: v8.30.1
+    rev: v8.30.0
     hooks:
       - id: gitleaks
         # pre-commit downloads its own Go toolchain, so the host Go version is irrelevant.
@@ -82,7 +82,7 @@ repos:
 
   # hadolint: Dockerfile linter.
   - repo: https://github.com/hadolint/hadolint
-    rev: v2.12.0
+    rev: v2.15.1
     hooks:
       - id: hadolint-docker
 
